@@ -1,13 +1,21 @@
 from tkinter import *
 import pygame.mixer
 
+def wait_finish(channel):
+	while channel.get_busy():
+		pass
+		
+
+
 def play_correct_sound():
 	num_good.set(num_good.get()+1)
-	correct_s.play()
+	wait_finish(correct_s.play())
 	
 def play_wrong_sound():
 	num_bad.set(num_bad.get()+1)
-	wrong_s.play()
+	wait_finish(wrong_s.play())
+	
+
 	
 app=Tk()
 app.title("TVN Game Show")
