@@ -32,7 +32,7 @@ num_good.set(0)
 num_bad=IntVar()
 num_bad.set(0)
 
-lab=Label(app, text="when you are ready, click the fucking button", height=3)
+lab=Label(app, text="when you are ready, click the button", height=3)
 
 lab.pack()
 
