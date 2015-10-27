@@ -4,8 +4,12 @@ from threading import *
 def clientrecv():
 	while 1:
 		servermsg=clientsocket.recv(1024)
-		print("server: "+servermsg.decode("utf8"))
-	clientsocket.close()
+		if servermsg:
+			print("server: "+servermsg.decode("utf8"))
+		else:
+			clientsocket.close()
+			exit(0)
+
 	
 
 
@@ -20,6 +24,7 @@ Thread(target=clientrecv).start()
 
 while 1:
 	rawdata=input('')
-	clientsocket.send(rawdata.encode("utf8")) #send
-	#rawdata=clientsocket.recv(1024) #receive
-	#print("from server: ", rawdata)
+	try:
+		clientsocket.send(rawdata.encode("utf8")) #send
+	except OSError:
+		exit(0)
