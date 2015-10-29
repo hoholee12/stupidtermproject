@@ -35,7 +35,7 @@ while not done:
 	pygame.display.flip() #update frame
 	clock.tick(60) #60fps
 
-
+pygame.quit() #hangs on IDLE if it isnt here.
 
 
 
