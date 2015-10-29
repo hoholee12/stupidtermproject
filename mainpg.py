@@ -26,10 +26,43 @@ done=False
 clock=pygame.time.Clock() #for clock.tick(60)
 
 while not done:
+'''
+event loop===========================================================
+'''
 	for i in pygame.event.get():
 		if i.type == pygame.QUIT:	#close button
 			done=True
+
 			
+			
+			
+			
+'''
+game logic===========================================================
+'''	
+	
+	
+	
+	
+
+	
+	
+	
+	
+'''
+draw loop============================================================
+'''
+
+
+
+
+
+
+
+
+'''
+final render=========================================================
+'''
 	screen.fill(white) #clear screen
 	
 	pygame.display.flip() #update frame
