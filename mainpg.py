@@ -63,10 +63,12 @@ draw loop============================================================
 	'''
 final render=========================================================
 	'''
-	screen.fill(white) #clear screen
+	
 	
 	pygame.display.flip() #update frame
 	clock.tick(60) #60fps
+	
+	screen.fill(white) #clear screen AFTER clock.tick wait
 
 pygame.quit() #hangs on IDLE if it isnt here.
 
