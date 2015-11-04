@@ -1,4 +1,4 @@
-#!/cygdrive/c/Python34/python.exe
+#!/usr/bin/env python
 import pygame
 import math
 pygame.init()
