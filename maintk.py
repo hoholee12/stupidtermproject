@@ -61,7 +61,7 @@ def decrypt(stuff):
 		multiplication=multiplication+(p*ord(str(c)))
 	if not str(multiplication*1337) in i[0]:
 		print("incorrect password!")
-		exit()
+		return stuff
 	i.pop(0)
 	result=""
 	for j in i:

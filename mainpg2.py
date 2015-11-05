@@ -19,13 +19,13 @@ lightblue=(0x0, 0xbf, 0xff)
 
 pi=3.141592653
 
-width=700
-height=500
+width=400
+height=400
 
 size=(width, height)
 screen=pygame.display.set_mode(size)
 
-pygame.display.set_caption("mygame")
+pygame.display.set_caption("snow animation")
 
 done=False
 
@@ -38,43 +38,12 @@ fps=60
 game vars============================================================
 '''
 
-class ball():
-	x=0
-	y=0
-	change_x=0
-	change_y=0
-	size=10
-	color=white
-	
-	def draw(self, screen):
-		pygame.draw.circle(screen, self.color, [self.x, self.y], self.size)
-		
-	def move(self):
-		self.x+=self.change_x
-		self.y+=self.change_y
-		
-	def bounce(self):
-		if self.x > width-self.size or self.x < self.size:
-			self.change_x*=-1
-		if self.y > height-self.size or self.y < self.size:
-			self.change_y*=-1
-		
-redball=ball()
-blueball=ball()
+star_list=[]
 
-redball.x=50
-redball.y=50
-blueball.x=600
-blueball.y=400
-
-redball.change_x=5
-redball.change_y=5
-blueball.change_x=-7
-blueball.change_y=-7
-
-redball.color=red
-blueball.color=blue
-
+for i in range(50):
+	x=random.randrange(0, 400)
+	y=random.randrange(0, 400)
+	star_list.append([x, y])
 
 
 '''
@@ -97,13 +66,7 @@ event loop===========================================================
 game logic===========================================================
 	'''	
 
-	redball.move()
-	blueball.move()
-	
-	redball.bounce()
-	blueball.bounce()
-	
-	
+
 	
 	
 	
@@ -111,14 +74,14 @@ game logic===========================================================
 draw loop============================================================
 	'''
 
-	
-	redball.draw(screen)
-	blueball.draw(screen)
-	
-	
-	
-	
-	
+	for i in range(len(star_list)):
+		pygame.draw.circle(screen, blue, star_list[i], 2)
+		star_list[i][1]+=1
+		if star_list[i][1]>400:
+			x=random.randrange(0, 400)
+			star_list[i][0]=x
+			y=random.randrange(-50, -10)
+			star_list[i][1]=y
 	
 	
 	'''
