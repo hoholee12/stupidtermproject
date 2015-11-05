@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter.filedialog import asksaveasfilename
 import threading
 import socket
-from getpass import getpass
 from sys import *
 
 #global vars
@@ -15,7 +14,7 @@ secretkey="badasscryptography"
 encrypt_on=0
 decrypt_on=0
 
-def changecfg(set):
+def togglecfg(set):
 	global encrypt_on
 	global decrypt_on
 	if set == 0: #decrypt switch
@@ -288,8 +287,8 @@ file_menu.add_command(label="username", command=lambda:username_options_window(r
 file_menu.add_command(label="exit", command=lambda: exitchat(root))
 crypt_menu=Menu(menubar, tearoff=0) #tearoff=0 removes dotted line
 menubar.add_cascade(label="crypt", menu=crypt_menu)
-crypt_menu.add_command(label="encrypt output", command=lambda: changecfg(0))
-crypt_menu.add_command(label="decrypt input", command=lambda: changecfg(1))
+crypt_menu.add_command(label="encrypt output", command=lambda: togglecfg(0))
+crypt_menu.add_command(label="decrypt input", command=lambda: togglecfg(1))
 
 
 
