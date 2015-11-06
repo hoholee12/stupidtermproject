@@ -66,7 +66,10 @@ def decrypt(stuff):
 	result=""
 	x=1
 	for j in i:
-		result=result+chr(int(int(int(j)/multiplication)/x))
+		try:
+			result=result+chr(int(int(int(j)/multiplication)/x))
+		except ValueError:
+			break
 		x+=1
 		
 	return result
