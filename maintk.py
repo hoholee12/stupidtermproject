@@ -39,7 +39,7 @@ def encrypt(result):
 	stuff=stuff+str(1337*multiplication)
 	stuff=stuff+","
 	for j in range(0,len(result)):
-		stuff=stuff+str(multiplication*ord(result[j]))
+		stuff=stuff+str(multiplication*ord(result[j])*(j+1))
 		try:
 			if result[j+1]:
 				stuff=stuff+","
@@ -64,8 +64,10 @@ def decrypt(stuff):
 		return stuff
 	i.pop(0)
 	result=""
+	x=1
 	for j in i:
-		result=result+chr(int(int(j)/multiplication))
+		result=result+chr(int(int(int(j)/multiplication)/x))
+		x+=1
 		
 	return result
 
