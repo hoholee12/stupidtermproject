@@ -21,8 +21,8 @@ gray=(0x80, 0x80, 0x80)
 pi=3.141592653
 
 
-width=700
-height=500
+width=854
+height=480
 size=(width, height)
 screen=pygame.display.set_mode(size)
 
@@ -107,6 +107,7 @@ class keys:
 		
 
 mykeys=keys()
+p2keys=keys()
 
 #default font
 font=pygame.font.Font(None, 25)
@@ -193,7 +194,7 @@ game logic===========================================================
 	
 		
 	mykeys.logic()
-
+	p2keys.logic()
 	
 	
 	
@@ -206,6 +207,10 @@ draw loop============================================================
 	mykeys.draw(screen, [50, 150])
 	mykeys.drawunder(screen, font, [50, 150])
 	mykeys.drawscratch(screen, [50, 150])
+	
+	p2keys.draw(screen, [594, 150])
+	p2keys.drawunder(screen, font, [594, 150])
+	p2keys.drawscratch(screen, [854, 150])
 	
 	for i in range(0, 7):
 		text=font.render(str(mykeys.on[i]), True, black)
