@@ -48,8 +48,8 @@ class keys:
 	on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 	lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 
-	def __init__(self, copy):
-		if copy == 1:
+	def __init__(self, init):
+		if init != 0:
 			self.val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 			self.on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 			self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
