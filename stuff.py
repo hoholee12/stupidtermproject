@@ -44,22 +44,24 @@ game vars============================================================
 class keys:
 	max=230
 	speed=max/(fps/6)
-	def __init__(self):
-		self.val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
-		self.on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
-		self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+	val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+	on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+	lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+
+	def __init__(self, copy):
+		if copy == 1:
+			self.val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+			self.on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+			self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 
 	def draw(self, screen, loc=[0,0]):
 		for i in range(0, 7):
 			if i%2 == 0:
-				try:
-					pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+self.max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
-				except:
-					print(self.val[i])
-					exit(1)
-				
+				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+self.max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
 			else:
 				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+self.max-self.val[i], 30, self.val[i]), (0x0, 0xbf, 0xff, self.val[i]))
+				
+				
 				
 	def drawscratch(self, screen, loc=[0,0]):
 		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+self.max-self.val[7], 50, self.val[7]), (0xff, 0x0, 0x0, self.val[7]))
@@ -68,6 +70,8 @@ class keys:
 			pygame.draw.ellipse(screen, red, [loc[0]-50+10, loc[1]+self.max+5, 50-20, 30-10])
 		else:
 			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+self.max+5, 50-20, 30-10])
+				
+				
 				
 	def drawunder(self, screen, font, loc=[0,0]):
 		loc[1]+=200 #hax
@@ -91,10 +95,12 @@ class keys:
 					text=font.render(str(self.on[i]), True, black)
 					screen.blit(text, [loc[0]+i*30, loc[1]+30])
 					
-		pygame.draw.rect(screen, red, [loc[0], loc[1]+30, 210, 0])
+		pygame.draw.rect(screen, red, [loc[0], loc[1]+30, 210, 0]) #red vertical bar
 		for i in range(0, 8):
-			pygame.draw.rect(screen, black, [loc[0]+i*30, 0, 0, loc[1]+30])
-				
+			pygame.draw.rect(screen, black, [loc[0]+i*30, 0, 0, loc[1]+30]) #black horizontal lines
+			
+			
+	#animation
 	def logic(self):		
 		for i in range(0, 8):
 			if self.val[i] == self.max+self.speed:
@@ -105,11 +111,12 @@ class keys:
 				continue
 			if self.lock[i] == 0:
 				self.val[i]-=self.speed
+##########################end of class keys:
 
 		
 
-mykeys=keys()
-p2keys=keys()
+mykeys=keys(0)
+p2keys=keys(1)
 
 #default font
 font=pygame.font.Font(None, 25)
