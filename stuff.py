@@ -42,11 +42,13 @@ game vars============================================================
 
 
 class keys:
-	val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
-	on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
-	lock=[0,0,0,0,0,0,0,0]
 	max=230
 	speed=max/(fps/6)
+	def __init__(self):
+		self.val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+		self.on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+		self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
+
 	def draw(self, screen, loc=[0,0]):
 		for i in range(0, 7):
 			if i%2 == 0:
@@ -127,7 +129,8 @@ event loop===========================================================
 	for i in pygame.event.get():
 		if i.type == pygame.QUIT:	#close button
 			done=True
-			
+		
+		#player1
 		if i.type == pygame.KEYDOWN:
 			#lower key
 			if i.key == pygame.K_z:
@@ -186,6 +189,65 @@ event loop===========================================================
 			if i.key == pygame.K_LSHIFT:
 				mykeys.lock[7]=0
 	
+		
+		#player2
+		if i.type == pygame.KEYDOWN:
+			#lower key
+			if i.key == pygame.K_m:
+				p2keys.val[0]=p2keys.max+p2keys.speed
+				p2keys.lock[0]=1
+			if i.key == pygame.K_COMMA:
+				p2keys.val[2]=p2keys.max+p2keys.speed
+				p2keys.lock[2]=1
+			if i.key == pygame.K_PERIOD:
+				p2keys.val[4]=p2keys.max+p2keys.speed
+				p2keys.lock[4]=1
+			if i.key == pygame.K_SLASH:
+				p2keys.val[6]=p2keys.max+p2keys.speed
+				p2keys.lock[6]=1
+			
+				
+				
+			#upper key
+			if i.key == pygame.K_k:
+				p2keys.val[1]=p2keys.max+p2keys.speed
+				p2keys.lock[1]=1
+			if i.key == pygame.K_l:
+				p2keys.val[3]=p2keys.max+p2keys.speed
+				p2keys.lock[3]=1
+			if i.key == pygame.K_SEMICOLON:
+				p2keys.val[5]=p2keys.max+p2keys.speed
+				p2keys.lock[5]=1
+			
+			#shift key
+			if i.key == pygame.K_RSHIFT:
+				p2keys.val[7]=p2keys.max+p2keys.speed
+				p2keys.lock[7]=1
+				
+		if i.type == pygame.KEYUP:
+			#lower key
+			if i.key == pygame.K_m:
+				p2keys.lock[0]=0
+			if i.key == pygame.K_COMMA:
+				p2keys.lock[2]=0
+			if i.key == pygame.K_PERIOD:
+				p2keys.lock[4]=0
+			if i.key == pygame.K_SLASH:
+				p2keys.lock[6]=0
+			
+				
+				
+			#upper key
+			if i.key == pygame.K_k:
+				p2keys.lock[1]=0
+			if i.key == pygame.K_l:
+				p2keys.lock[3]=0
+			if i.key == pygame.K_SEMICOLON:
+				p2keys.lock[5]=0
+				
+			#shift key
+			if i.key == pygame.K_RSHIFT:
+				p2keys.lock[7]=0
 			
 	'''
 game logic===========================================================
