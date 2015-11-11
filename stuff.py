@@ -42,7 +42,7 @@ game vars============================================================
 
 
 class keys:
-	max=230
+	max=100
 	speed=max/(fps/6)
 	val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 	on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
@@ -116,7 +116,7 @@ class keys:
 		
 
 mykeys=keys(0)
-p2keys=keys(1)
+p2keys=keys(0)
 
 #default font
 font=pygame.font.Font(None, 25)
