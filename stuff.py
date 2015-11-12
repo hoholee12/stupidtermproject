@@ -42,8 +42,10 @@ game vars============================================================
 
 
 class keys:
-	max=100
-	speed=max/(fps/6)
+	#tweak bar length and speed here
+	max=60
+	speed=max/(fps/15)
+	
 	val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 	on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 	lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
@@ -55,21 +57,23 @@ class keys:
 			self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 
 	def draw(self, screen, loc=[0,0]):
+		max=230
 		for i in range(0, 7):
 			if i%2 == 0:
-				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+self.max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
+				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
 			else:
-				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+self.max-self.val[i], 30, self.val[i]), (0x0, 0xbf, 0xff, self.val[i]))
+				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0xbf, 0xff, self.val[i]))
 				
 				
 				
 	def drawscratch(self, screen, loc=[0,0]):
-		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+self.max-self.val[7], 50, self.val[7]), (0xff, 0x0, 0x0, self.val[7]))
-		pygame.draw.ellipse(screen, gray, [loc[0]-50, loc[1]+self.max, 50, 30])
+		max=230
+		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+max-self.val[7], 50, self.val[7]), (0xff, 0x0, 0x0, self.val[7]))
+		pygame.draw.ellipse(screen, gray, [loc[0]-50, loc[1]+max, 50, 30])
 		if self.on[7] == 1:
-			pygame.draw.ellipse(screen, red, [loc[0]-50+10, loc[1]+self.max+5, 50-20, 30-10])
+			pygame.draw.ellipse(screen, red, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
 		else:
-			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+self.max+5, 50-20, 30-10])
+			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
 				
 				
 				
@@ -263,7 +267,7 @@ game logic===========================================================
 	
 		
 	mykeys.logic()
-	p2keys.logic()
+	#p2keys.logic()
 	
 	
 	
