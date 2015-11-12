@@ -131,7 +131,7 @@ class keys:
 		
 
 mykeys=keys(0)
-p2keys=keys(1)
+p2keys=keys(0)
 
 #default font
 font=pygame.font.Font(None, 25)
@@ -278,7 +278,7 @@ game logic===========================================================
 	
 		
 	mykeys.logic()
-	p2keys.logic()
+	#p2keys.logic()
 	
 	
 	
