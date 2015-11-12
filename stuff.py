@@ -17,6 +17,7 @@ green=(0x0, 0xff, 0x0)
 blue=(0x0, 0x0, 0xff)
 lightblue=(0x0, 0xbf, 0xff)
 gray=(0x80, 0x80, 0x80)
+orange=(0xff, 0xa5, 0x0)
 
 pi=3.141592653
 
@@ -39,19 +40,22 @@ fps=60
 game vars============================================================
 '''
 
-
+player_image=pygame.image.load("player.png").convert()
+player_image.set_colorkey(white)
 
 class keys:
 	#tweak bar length and speed here
 	max=60
 	speed=max/(fps/15)
 	
+	angle=360 #turntable
 	val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 	on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 	lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 
 	def __init__(self, init):
 		if init != 0:
+			angle=360 #turntable
 			self.val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 			self.on=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 			self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
@@ -71,9 +75,16 @@ class keys:
 		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+max-self.val[7], 50, self.val[7]), (0xff, 0x0, 0x0, self.val[7]))
 		pygame.draw.ellipse(screen, gray, [loc[0]-50, loc[1]+max, 50, 30])
 		if self.on[7] == 1:
-			pygame.draw.ellipse(screen, red, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
+			pygame.draw.ellipse(screen, orange, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
+			self.angle-=self.speed
+			self.angle%=360
 		else:
 			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
+		newimg=pygame.transform.rotate(player_image, self.angle)
+		newimg=pygame.transform.scale(newimg, [30, 20])
+		
+		screen.blit(newimg, [loc[0]-50+10, loc[1]+max+5])
+		
 				
 				
 				
@@ -82,7 +93,7 @@ class keys:
 		for i in range(0, 7):
 			if i%2 ==0:
 				if self.on[i] == 1:
-					pygame.draw.rect(screen, red, [loc[0]+i*30, loc[1]+50, 30, 50])
+					pygame.draw.rect(screen, orange, [loc[0]+i*30, loc[1]+50, 30, 50])
 					text=font.render(str(self.on[i]), True, white)
 					screen.blit(text, [loc[0]+i*30, loc[1]+50])
 				else:
@@ -91,7 +102,7 @@ class keys:
 					screen.blit(text, [loc[0]+i*30, loc[1]+50])
 			else:
 				if self.on[i] == 1:
-					pygame.draw.rect(screen, red, [loc[0]+i*30, loc[1]+30, 30, 50])
+					pygame.draw.rect(screen, orange, [loc[0]+i*30, loc[1]+30, 30, 50])
 					text=font.render(str(self.on[i]), True, white)
 					screen.blit(text, [loc[0]+i*30, loc[1]+30])
 				else:
@@ -120,7 +131,7 @@ class keys:
 		
 
 mykeys=keys(0)
-p2keys=keys(0)
+p2keys=keys(1)
 
 #default font
 font=pygame.font.Font(None, 25)
@@ -267,7 +278,7 @@ game logic===========================================================
 	
 		
 	mykeys.logic()
-	#p2keys.logic()
+	p2keys.logic()
 	
 	
 	
