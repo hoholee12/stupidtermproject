@@ -45,7 +45,7 @@ player_image.set_colorkey(white)
 
 class keys:
 	#tweak bar length and speed here
-	max=60
+	max=100
 	speed=max/(fps/15)
 	
 	angle=360 #turntable
@@ -61,25 +61,28 @@ class keys:
 			self.lock=[0,0,0,0,0,0,0,0] #zsxdcfv shift
 
 	def draw(self, screen, loc=[0,0]):
-		max=230
+		max=230 #hax
+		x=0
 		for i in range(0, 7):
 			if i%2 == 0:
-				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
+				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+x, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
+				x+=30
 			else:
-				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+i*30, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0xbf, 0xff, self.val[i]))
+				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+x, loc[1]+max-self.val[i], 25, self.val[i]), (0x0, 0xbf, 0xff, self.val[i]))
+				x+=25
 				
 				
 				
 	def drawscratch(self, screen, loc=[0,0]):
-		max=230
+		max=230 #hax
 		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+max-self.val[7], 50, self.val[7]), (0xff, 0x0, 0x0, self.val[7]))
 		pygame.draw.ellipse(screen, gray, [loc[0]-50, loc[1]+max, 50, 30])
 		if self.on[7] == 1:
-			pygame.draw.ellipse(screen, orange, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
+			pygame.draw.ellipse(screen, orange, [loc[0]-50+10, loc[1]+max+5, 30, 20])
 			self.angle-=self.speed
 			self.angle%=360
 		else:
-			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+max+5, 50-20, 30-10])
+			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+max+5, 30, 20])
 		newimg=pygame.transform.rotate(player_image, self.angle)
 		newimg=pygame.transform.scale(newimg, [30, 20])
 		
@@ -90,29 +93,41 @@ class keys:
 				
 	def drawunder(self, screen, font, loc=[0,0]):
 		loc[1]+=200 #hax
+		x=0
 		for i in range(0, 7):
 			if i%2 ==0:
 				if self.on[i] == 1:
-					pygame.draw.rect(screen, orange, [loc[0]+i*30, loc[1]+50, 30, 50])
+					pygame.draw.rect(screen, orange, [loc[0]+x, loc[1]+50, 30, 50])
 					text=font.render(str(self.on[i]), True, white)
-					screen.blit(text, [loc[0]+i*30, loc[1]+50])
+					screen.blit(text, [loc[0]+x, loc[1]+50])
+					x+=30
 				else:
-					pygame.draw.rect(screen, gray, [loc[0]+i*30, loc[1]+50, 30, 50])
+					pygame.draw.rect(screen, gray, [loc[0]+x, loc[1]+50, 30, 50])
 					text=font.render(str(self.on[i]), True, black)
-					screen.blit(text, [loc[0]+i*30, loc[1]+50])
+					screen.blit(text, [loc[0]+x, loc[1]+50])
+					x+=30
 			else:
 				if self.on[i] == 1:
-					pygame.draw.rect(screen, orange, [loc[0]+i*30, loc[1]+30, 30, 50])
+					pygame.draw.rect(screen, orange, [loc[0]+x, loc[1]+30, 25, 50])
 					text=font.render(str(self.on[i]), True, white)
-					screen.blit(text, [loc[0]+i*30, loc[1]+30])
+					screen.blit(text, [loc[0]+x, loc[1]+30])
+					x+=25
 				else:
-					pygame.draw.rect(screen, gray, [loc[0]+i*30, loc[1]+30, 30, 50])
+					pygame.draw.rect(screen, gray, [loc[0]+x, loc[1]+30, 25, 50])
 					text=font.render(str(self.on[i]), True, black)
-					screen.blit(text, [loc[0]+i*30, loc[1]+30])
+					screen.blit(text, [loc[0]+x, loc[1]+30])
+					x+=25
 					
-		pygame.draw.rect(screen, red, [loc[0], loc[1]+30, 210, 0]) #red vertical bar
+		pygame.draw.rect(screen, red, [loc[0], loc[1]+30, 195, 0]) #red vertical bar
+		#white horizontal bars
+		x=0
 		for i in range(0, 8):
-			pygame.draw.rect(screen, black, [loc[0]+i*30, 0, 0, loc[1]+30]) #black horizontal lines
+			if i%2 == 0:
+				pygame.draw.rect(screen, white, [loc[0]+x, 0, 0, loc[1]+30])
+				x+=30
+			else:
+				pygame.draw.rect(screen, white, [loc[0]+x, 0, 0, loc[1]+30])
+				x+=25
 			
 			
 	#animation
@@ -127,7 +142,8 @@ class keys:
 			if self.lock[i] == 0:
 				self.val[i]-=self.speed
 ##########################end of class keys:
-
+#draw: 195 pixels wide
+#drawscratch: 50 pixels wide
 		
 
 mykeys=keys(0)
@@ -292,12 +308,12 @@ draw loop============================================================
 	mykeys.drawunder(screen, font, [50, 150])
 	mykeys.drawscratch(screen, [50, 150])
 	
-	p2keys.draw(screen, [594, 150])
-	p2keys.drawunder(screen, font, [594, 150])
+	p2keys.draw(screen, [609, 150])
+	p2keys.drawunder(screen, font, [609, 150])
 	p2keys.drawscratch(screen, [854, 150])
 	
 	for i in range(0, 7):
-		text=font.render(str(mykeys.on[i]), True, black)
+		text=font.render(str(mykeys.on[i]), True, white)
 		screen.blit(text, [width-200+25*i, height-30])
 	
 	
@@ -308,7 +324,7 @@ final render=========================================================
 	pygame.display.flip() #update frame
 	clock.tick(fps) #60fps
 	
-	screen.fill(white) #clear screen AFTER clock.tick wait
+	screen.fill(black) #clear screen AFTER clock.tick wait
 
 pygame.quit() #hangs on IDLE if it isnt here.
 
