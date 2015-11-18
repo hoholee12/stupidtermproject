@@ -14,9 +14,9 @@ class reader:
 			if i[:1] == '#':
 				if i[1:4] == "WAV":
 					try:
-						self.WAV[i[4:6]]=mixer.Sound(filename.split('/')[0]+'/'+i.split(' ')[1])
+						self.WAV[i[4:6]]=mixer.Sound(filename.rsplit('/', 1)[0]+'/'+i.split(' ')[1])
 					except pygame.error:
-						self.WAV[i[4:6]]=mixer.Sound(filename.split('/')[0]+'/'+i.split(' ')[1].split('.')[0]+".ogg")
+						self.WAV[i[4:6]]=mixer.Sound(filename.rsplit('/', 1)[0]+'/'+i.split(' ')[1].split('.')[0]+".ogg")
 						
 				if i[1:4] == "BPM":
 					self.BPM=int(i.split(' ')[1])
