@@ -33,7 +33,7 @@ done=False
 
 clock=pygame.time.Clock() #for clock.tick(60)
 
-fps=60
+fps=30
 
 
 '''
@@ -45,8 +45,8 @@ player_image.set_colorkey(white)
 
 class keys:
 	#tweak bar length and speed here
-	max=100
-	speed=max/(fps/15)
+	max=200
+	speed=max/(fps/6)
 	
 	angle=360 #turntable
 	val=[0,0,0,0,0,0,0,0] #zsxdcfv shift
@@ -65,7 +65,7 @@ class keys:
 		x=0
 		for i in range(0, 7):
 			if i%2 == 0:
-				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+x, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0x0, 0xff, self.val[i]))
+				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+x, loc[1]+max-self.val[i], 30, self.val[i]), (0x0, 0xbf, 0x0, self.val[i]))
 				x+=30
 			else:
 				pygame.gfxdraw.box(screen, pygame.Rect(loc[0]+x, loc[1]+max-self.val[i], 25, self.val[i]), (0x0, 0xbf, 0xff, self.val[i]))
@@ -75,11 +75,11 @@ class keys:
 				
 	def drawscratch(self, screen, loc=[0,0]):
 		max=230 #hax
-		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+max-self.val[7], 50, self.val[7]), (0xff, 0x0, 0x0, self.val[7]))
+		pygame.gfxdraw.box(screen, pygame.Rect(loc[0]-50, loc[1]+max-self.val[7], 50, self.val[7]), (0xbf, 0xbf, 0x0, self.val[7]))
 		pygame.draw.ellipse(screen, gray, [loc[0]-50, loc[1]+max, 50, 30])
 		if self.on[7] == 1:
 			pygame.draw.ellipse(screen, orange, [loc[0]-50+10, loc[1]+max+5, 30, 20])
-			self.angle-=self.speed
+			self.angle-=self.speed/(fps/15)
 			self.angle%=360
 		else:
 			pygame.draw.ellipse(screen, lightblue, [loc[0]-50+10, loc[1]+max+5, 30, 20])
