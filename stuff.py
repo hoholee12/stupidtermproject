@@ -146,8 +146,8 @@ class keys:
 #drawscratch: 50 pixels wide
 		
 
-mykeys=keys(0)
-p2keys=keys(0)
+mykeys=keys(1)
+p2keys=keys(1)
 
 #default font
 font=pygame.font.Font(None, 25)
@@ -294,7 +294,7 @@ game logic===========================================================
 	
 		
 	mykeys.logic()
-	#p2keys.logic()
+	p2keys.logic()
 	
 	
 	
