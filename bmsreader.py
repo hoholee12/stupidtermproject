@@ -1,9 +1,41 @@
 #!/usr/bin/env python
 import pygame.mixer
 import pygame
+import threading
 
 mixer=pygame.mixer
 mixer.init()
+
+class player(threading.Thread):
+	def __init__(self, WAV, NUM, BPM, PLAY, loop, bms, filename, count, i, j):
+		threading.Thread.__init__(self)
+		self.WAV=WAV
+		self.NUM=NUM
+		self.BPM=BPM
+		self.PLAY=PLAY
+		self.loop=loop
+		self.bms=bms
+		self.filename=filename
+		self.count=count
+		self.i=i
+		self.j=j
+
+
+	def run(self):
+		try:
+			x=int((60/(self.BPM/4))/(self.count[self.i][self.j]/2)*1000+0.5)
+		except:
+			x=0
+		print(x)
+		for k in range(0, self.count[self.i][self.j], 2):
+			if str(self.PLAY[self.i][self.j])[k:k+2] == "00":
+				pass
+			else:
+				print("osim:"+str(self.PLAY[self.i][self.j])[k:k+2]+" "+str(self.i)+" "+str(self.j))
+				self.WAV[str(self.PLAY[self.i][self.j])[k:k+2]].play()
+			pygame.time.delay(x)
+
+
 
 class reader:
 	WAV={}
@@ -85,98 +117,25 @@ class reader:
 						print("8:"+str(self.PLAY[self.loop][8]))
 					print(self.loop, diff, self.count[self.loop])
 		print("end")
-						
-						
+
+
 						
 	def playnote(self):
 		j=0
-		x=int((60/(self.BPM/4))/192*1000+0.5)
+		PLAYTHREAD=[[0 for i in range(9)] for i in range(384)]
+		x=int((60/(self.BPM/4))*1000+0.5) #master
 		for i in range(0, self.loop+1):
-			for k in range(0, 384, 2):
-				for j in range(9):
-					#print(str(j)+":"+(str(self.PLAY[i][j])))
+			for j in range(9):
+				PLAYTHREAD[i][j]=player(self.WAV, self.NUM, self.BPM, self.PLAY, self.loop, self.bms, self.filename, self.count, i, j)
+				print(PLAYTHREAD[i][j])
 
-					if str(self.PLAY[i][j])[k:k+2] == "00" or str(self.PLAY[i][j])[k:k+2] == "0" or str(self.PLAY[i][j])[k:k+2] == "":
-						pass
-					else:
-						print("osim:"+str(self.PLAY[i][j])[k:k+2]+" "+str(i)+" "+str(j))
-						self.WAV[str(self.PLAY[i][j])[k:k+2]].play()
-				pygame.time.delay(x) #140bpm
+		for i in range(0, self.loop+1):
+			for j in range(9):
+				PLAYTHREAD[i][j].start()
+				print(".", end="")
+			pygame.time.delay(x) #140bpm
 
-				'''	
-					if i[4:6] == "01": #autoplay
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "11": #whitekey 1
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "12": #bluekey 1
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "13": #whitekey 2
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "14": #bluekey 2
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "15": #whitekey 3
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "18": #bluekey 3
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-					if i[4:6] == "19": #whitekey 4
-						for j in range(1, len(i)-7, 2):
-							print(i[j+6:j+8])
-							if i[j+6:j+8] == "00":
-								pygame.time.delay(1)
-								continue
-							busy=self.WAV[i[j+6: j+8]].play()
-							pygame.time.delay(1)
-							
-		
-		
-		print(self.BPM)
-		print(self.NUM)
-		busy=self.WAV["01"].play()
-		while busy.get_busy():
-			pygame.time.delay(100)
-			'''
+			
 			
 hello=reader("bms/The Beauty Of Silence/The Beauty Of Silence(2 A).bms")
 hello.readnote()
