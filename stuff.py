@@ -2,6 +2,7 @@
 import pygame
 import pygame.gfxdraw
 import math
+import bmsreader
 pygame.init()
 
 '''
@@ -42,6 +43,17 @@ game vars============================================================
 
 player_image=pygame.image.load("player.png").convert()
 player_image.set_colorkey(white)
+
+
+class note:
+	def __init__(self, color, loc=[0,0], width):
+		self.color=color
+		self.loc=loc
+		self.width=width
+
+	def movenote(self, howmuch):
+
+
 
 class keys:
 	#tweak bar length and speed here
@@ -87,9 +99,12 @@ class keys:
 		newimg=pygame.transform.scale(newimg, [30, 20])
 		
 		screen.blit(newimg, [loc[0]-50+10, loc[1]+max+5])
+
 		
-				
-				
+	def drawline(self, screen, loc=[0,0]):
+		pygame.draw.rect(screen, white, [loc[0], loc[1]+30, 195, 0]) #red vertical bar
+
+
 				
 	def drawunder(self, screen, font, loc=[0,0]):
 		loc[1]+=200 #hax
@@ -146,11 +161,16 @@ class keys:
 #drawscratch: 50 pixels wide
 		
 
+hello=reader("bms/THE SAFARI/THE SAFARI(1 H).bms")
+hello.readnote()
+
 mykeys=keys(1)
 p2keys=keys(1)
 
 #default font
 font=pygame.font.Font(None, 25)
+
+
 
 		
 		

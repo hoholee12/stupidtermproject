@@ -2,38 +2,37 @@
 import pygame.mixer
 import pygame
 import threading
+import time
 
 mixer=pygame.mixer
 mixer.init()
 
 class player(threading.Thread):
-	def __init__(self, WAV, NUM, BPM, PLAY, loop, bms, filename, count, i, j):
+	def __init__(self, WAV, NUM, BPM, MPLAY, loop, bms, filename, count, i):
 		threading.Thread.__init__(self)
 		self.WAV=WAV
 		self.NUM=NUM
 		self.BPM=BPM
-		self.PLAY=PLAY
+		self.MPLAY=MPLAY
 		self.loop=loop
 		self.bms=bms
 		self.filename=filename
 		self.count=count
 		self.i=i
-		self.j=j
 
 
 	def run(self):
-		try:
-			x=int((60/(self.BPM/4))/(self.count[self.i][self.j]/2)*1000+0.5)
-		except:
-			x=0
-		print(x)
-		for k in range(0, self.count[self.i][self.j], 2):
-			if str(self.PLAY[self.i][self.j])[k:k+2] == "00":
-				pass
-			else:
-				print("osim:"+str(self.PLAY[self.i][self.j])[k:k+2]+" "+str(self.i)+" "+str(self.j))
-				self.WAV[str(self.PLAY[self.i][self.j])[k:k+2]].play()
-			pygame.time.delay(x)
+		x=(60/(self.BPM/4))/192*1000+0.5 #master
+		for k in range(0, 384, 2):
+			for j in range(9):
+				if self.MPLAY[self.i][j][k:k+2] != "" and self.MPLAY[self.i][j][k:k+2] != "00" and self.MPLAY[self.i][j][k:k+2] != "01":
+					self.WAV[self.MPLAY[self.i][j][k:k+2]].play()
+					print("osim:"+self.MPLAY[self.i][j][k:k+2]+" "+str(self.i)+" "+str(j)+" "+str(k))
+			if self.MPLAY[self.i][9][k:k+2] != "" and self.MPLAY[self.i][9][k:k+2] != "00" and self.MPLAY[self.i][9][k:k+2] != "F0":
+				print("hello")
+				self.WAV[self.MPLAY[self.i][9][k:k+2]].play()
+
+			time.sleep(x/1000.0) #140bpm
 
 
 
@@ -41,11 +40,12 @@ class reader:
 	WAV={}
 	NUM=[]
 	BPM=None
-	PLAY=[[0 for i in range(9)] for i in range(384)]
+	PLAY=[["" for i in range(10)] for i in range(100)]
+	MPLAY=[["" for i in range(10)] for i in range(100)]
 	loop=-1
 	bms=None
 	filename=None
-	count=[[0 for i in range(9)] for i in range(384)]
+	count=[[0 for i in range(10)] for i in range(100)]
 	def __init__(self, filename):
 		self.filename=filename
 		self.bms=open(self.filename, 'r')
@@ -83,6 +83,10 @@ class reader:
 						self.PLAY[self.loop][0]=i[7:]
 						self.count[self.loop][0]=len(str(self.PLAY[self.loop][0]))
 						print("0:"+str(self.PLAY[self.loop][0]))
+					elif i[4:6] == "04": #bga
+						self.PLAY[self.loop][9]=i[7:]
+						self.count[self.loop][9]=len(str(self.PLAY[self.loop][9]))
+						print("0:"+str(self.PLAY[self.loop][9]))
 					elif i[4:6] == "11": #whitekey 1
 						self.PLAY[self.loop][1]=i[7:]
 						self.count[self.loop][1]=len(str(self.PLAY[self.loop][1]))
@@ -119,27 +123,41 @@ class reader:
 		print("end")
 
 
-						
 	def playnote(self):
 		j=0
-		PLAYTHREAD=[[0 for i in range(9)] for i in range(384)]
-		x=int((60/(self.BPM/4))*1000+0.5) #master
+		l=0
+		PLAYTHREAD=None
+		x=(60/(self.BPM/4))*1000+0.5 #master
 		for i in range(0, self.loop+1):
-			for j in range(9):
-				PLAYTHREAD[i][j]=player(self.WAV, self.NUM, self.BPM, self.PLAY, self.loop, self.bms, self.filename, self.count, i, j)
-				print(PLAYTHREAD[i][j])
+			for j in range(10):
+				if self.count[i][j] != 0:
+					l=0 #init
+					for k in range(192):
+						if int(192/(self.count[i][j]/2)*(l/2)) == k:
+							self.MPLAY[i][j]+=self.PLAY[i][j][l:l+2]
+							l+=2
+						else:
+							self.MPLAY[i][j]+="00"
+				else:
+					for k in range(192):
+						self.MPLAY[i][j]+="00"
+				print(str(i), str(j), str(l), self.MPLAY[i][j])
 
 		for i in range(0, self.loop+1):
-			for j in range(9):
-				PLAYTHREAD[i][j].start()
-				print(".", end="")
-			pygame.time.delay(x) #140bpm
+			PLAYTHREAD=player(self.WAV, self.NUM, self.BPM, self.MPLAY, self.loop, self.bms, self.filename, self.count, i)
+			PLAYTHREAD.start()
+			print(x)
+			time.sleep(x/1000.0) #140bpm
+
+
+
 
 			
-			
-hello=reader("bms/The Beauty Of Silence/The Beauty Of Silence(2 A).bms")
-hello.readnote()
-hello.playnote()
+if __name__ == "__main__":
+				
+	hello=reader("bms/THE SAFARI/THE SAFARI(1 H).bms")
+	hello.readnote()
+	hello.playnote()
 
 
 
