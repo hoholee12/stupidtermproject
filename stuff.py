@@ -3,6 +3,7 @@ import pygame
 import pygame.gfxdraw
 import math
 import bmsreader
+import time
 pygame.init()
 
 '''
@@ -46,12 +47,20 @@ player_image.set_colorkey(white)
 
 
 class note:
-	def __init__(self, color, loc=[0,0], width):
+	def __init__(self, color, str, loc=[0, 0, 0, 0]):
 		self.color=color
+		self.str=str
 		self.loc=loc
-		self.width=width
 
-	def movenote(self, howmuch):
+	def printnote(self):
+		pygame.gfxdraw.box(screen, pygame.Rect(self.loc[0], self.loc[1], self.loc[2], self.loc[3]), self.color)
+
+	def playmusic(self):
+		if self.loc[1]>380:
+			self.loc[1]=-100000000
+			return True
+		else:
+			return False
 
 
 
@@ -102,7 +111,7 @@ class keys:
 
 		
 	def drawline(self, screen, loc=[0,0]):
-		pygame.draw.rect(screen, white, [loc[0], loc[1]+30, 195, 0]) #red vertical bar
+		pygame.draw.rect(screen, white, [loc[0], loc[1], 195, 0]) #bpm vertical bar
 
 
 				
@@ -161,8 +170,9 @@ class keys:
 #drawscratch: 50 pixels wide
 		
 
-hello=reader("bms/THE SAFARI/THE SAFARI(1 H).bms")
+hello=bmsreader.reader("bms/The Beauty Of Silence/The Beauty Of Silence(2 A).bms")
 hello.readnote()
+hello.arrangenote()
 
 mykeys=keys(1)
 p2keys=keys(1)
@@ -171,9 +181,18 @@ p2keys=keys(1)
 font=pygame.font.Font(None, 25)
 
 
+count=0
+		
 
-		
-		
+j=0
+k=0
+x=0
+xbuf=20
+
+testnote=[[None for i in range(10)] for i in range(xbuf)]
+
+
+
 '''
 =====================================================================
 '''
@@ -323,7 +342,68 @@ game logic===========================================================
 draw loop============================================================
 	'''
 
-	
+
+	arr=hello.drawnote(j, k)
+	print(arr, j, k)
+	k+=2
+	if k>384:
+		k=0
+		j+=1
+	if x>=xbuf:
+		x=0
+
+
+	for i in range(10):
+		if arr[i] != "00":
+			if i == 0:
+				testnote[x][i]=note(black, arr[i], [0, 0, 0, 0]) #bar
+			if i == 1:
+				testnote[x][i]=note(gray, arr[i], [50, 0, 30, 5]) #white1
+			if i == 2:
+				testnote[x][i]=note(blue, arr[i], [80, 0, 25, 5]) #blue1
+			if i == 3:
+				testnote[x][i]=note(gray, arr[i], [105, 0, 30, 5]) #white2
+			if i == 4:
+				testnote[x][i]=note(blue, arr[i], [135, 0, 25, 5]) #blue2
+			if i == 5:
+				testnote[x][i]=note(gray, arr[i], [160, 0, 30, 5]) #white3
+			if i == 6:
+				testnote[x][i]=note(blue, arr[i], [190, 0, 25, 5]) #blue3
+			if i == 7:
+				testnote[x][i]=note(gray, arr[i], [215, 0, 30, 5]) #white4
+			if i == 8:
+				testnote[x][i]=note(red, arr[i], [0, 0, 50, 5]) #scratch
+
+	#print notes
+	for a in range(xbuf):
+		if testnote[a][0]:
+			if testnote[a][0].playmusic():
+				hello.WAV[testnote[a][0].str].play()
+		for i in range(1, 10):
+			if testnote[a][i]:
+				testnote[a][i].printnote()
+				if testnote[a][i].playmusic():
+					hello.WAV[testnote[a][i].str].play()
+					if i <9:
+						mykeys.val[i-1]=mykeys.max+mykeys.speed
+						mykeys.lock[i-1]=1
+					
+						
+				else:
+					if i <9:
+						mykeys.lock[i-1]=0
+					
+
+
+	#move notes
+	for a in range(xbuf):
+		for i in range(10):
+			if testnote[a][i]:
+				testnote[a][i].loc[1]+=1
+
+
+	x+=1
+
 	mykeys.draw(screen, [50, 150])
 	mykeys.drawunder(screen, font, [50, 150])
 	mykeys.drawscratch(screen, [50, 150])
@@ -340,9 +420,9 @@ draw loop============================================================
 	'''
 final render=========================================================
 	'''
-	
+	test=(60/(hello.BPM/4))/192*1000+0.5 #master
 	pygame.display.flip() #update frame
-	clock.tick(fps) #60fps
+	time.sleep(test/1000.0)
 	
 	screen.fill(black) #clear screen AFTER clock.tick wait
 

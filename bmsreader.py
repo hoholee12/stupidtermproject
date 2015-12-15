@@ -25,12 +25,12 @@ class player(threading.Thread):
 		x=(60/(self.BPM/4))/192*1000+0.5 #master
 		for k in range(0, 384, 2):
 			for j in range(9):
-				if self.MPLAY[self.i][j][k:k+2] != "" and self.MPLAY[self.i][j][k:k+2] != "00" and self.MPLAY[self.i][j][k:k+2] != "01":
+				if self.MPLAY[self.i][j][k:k+2] != "" and self.MPLAY[self.i][j][k:k+2] != "00":
 					self.WAV[self.MPLAY[self.i][j][k:k+2]].play()
 					print("osim:"+self.MPLAY[self.i][j][k:k+2]+" "+str(self.i)+" "+str(j)+" "+str(k))
-			if self.MPLAY[self.i][9][k:k+2] != "" and self.MPLAY[self.i][9][k:k+2] != "00" and self.MPLAY[self.i][9][k:k+2] != "F0":
-				print("hello")
-				self.WAV[self.MPLAY[self.i][9][k:k+2]].play()
+			#if self.MPLAY[self.i][9][k:k+2] != "" and self.MPLAY[self.i][9][k:k+2] != "00" and self.MPLAY[self.i][9][k:k+2] != "F0":
+			#	print("hello")
+			#	self.WAV[self.MPLAY[self.i][9][k:k+2]].play()
 
 			time.sleep(x/1000.0) #140bpm
 
@@ -123,11 +123,9 @@ class reader:
 		print("end")
 
 
-	def playnote(self):
+	def arrangenote(self):
 		j=0
 		l=0
-		PLAYTHREAD=None
-		x=(60/(self.BPM/4))*1000+0.5 #master
 		for i in range(0, self.loop+1):
 			for j in range(10):
 				if self.count[i][j] != 0:
@@ -143,6 +141,26 @@ class reader:
 						self.MPLAY[i][j]+="00"
 				print(str(i), str(j), str(l), self.MPLAY[i][j])
 
+
+	def drawnote(self, i, k):
+		arr=["" for x in range(10)]
+		for j in range(10):
+			if self.MPLAY[i][j][k:k+2] != "" and self.MPLAY[i][j][k:k+2] != "00" and self.MPLAY[i][j][k:k+2] != "01":
+				arr[j]=self.MPLAY[i][j][k:k+2]
+			else:
+				arr[j]="00"
+		return arr
+
+
+
+
+
+
+
+	def playnote(self):
+		i=0
+		PLAYTHREAD=None
+		x=(60/(self.BPM/4))*1000+0.5 #master
 		for i in range(0, self.loop+1):
 			PLAYTHREAD=player(self.WAV, self.NUM, self.BPM, self.MPLAY, self.loop, self.bms, self.filename, self.count, i)
 			PLAYTHREAD.start()
@@ -157,6 +175,8 @@ if __name__ == "__main__":
 				
 	hello=reader("bms/THE SAFARI/THE SAFARI(1 H).bms")
 	hello.readnote()
+	hello.arrangenote()
+
 	hello.playnote()
 
 
