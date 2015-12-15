@@ -399,7 +399,7 @@ draw loop============================================================
 	for a in range(xbuf):
 		for i in range(10):
 			if testnote[a][i]:
-				testnote[a][i].loc[1]+=1
+				testnote[a][i].loc[1]+=5
 
 
 	x+=1
